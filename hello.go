@@ -1,24 +1,36 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 )
 
-func hello(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello world!\n")
-}
+const serverPort string = "8080"
+
+var defaultNamespace map[string]string
 
 func ping(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "pong\n")
 }
 
+func get(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, defaultNamespace[r.URL.Query().Get("k")])
+}
+
+func set(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "SET")
+}
+
 func main() {
-	fmt.Printf("Hello, world.\n")
-	fmt.Printf("Listening on http://localhost:8080")
-	http.HandleFunc("/", hello)
+	// Initialize default namespace
+	defaultNamespace = make(map[string]string)
+	defaultNamespace["hello"] = "world"
+
+	// Initialize http server
+	http.HandleFunc("/v1/get", get)
+	http.HandleFunc("/v1/set", set)
 	http.HandleFunc("/ping", ping)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Listening on http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":"+serverPort, nil))
 }

@@ -4,12 +4,12 @@
 
 ### GET
 ```
-GET /v1/get/:key
+GET /v1/get?k=key
 ```
 
 ### SET
 ```
-POST /v1/set/:key
+POST /v1/set?k=key
 {
     "value": "..."
 }
