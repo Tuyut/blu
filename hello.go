@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -19,5 +20,5 @@ func main() {
 	fmt.Printf("Listening on http://localhost:8080")
 	http.HandleFunc("/", hello)
 	http.HandleFunc("/ping", ping)
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
